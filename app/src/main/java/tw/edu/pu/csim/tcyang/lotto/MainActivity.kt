@@ -52,22 +52,29 @@ fun Play(modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
     Column(
-        modifier = modifier.fillMaxSize(),
+        // 使用 pointerInput 處理整個 Column 的點擊事件，以顯示座標
+        modifier = modifier
+            .fillMaxSize()
+            .pointerInput(Unit) {
+                detectTapGestures { offset: Offset ->
+                    val x = offset.x.toInt()
+                    val y = offset.y.toInt()
+                    Toast.makeText(context, "觸控座標：($x, $y)", Toast.LENGTH_SHORT).show()
+                }
+            },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        // 在這裡，我們將 pointerInput 修飾詞應用到 Text 上
+        // 在 Text 本身添加一個獨立的 pointerInput 修飾詞來處理數字增減
         Text(
             text = "樂透數字(1-100)為 $lucky",
             modifier = Modifier.pointerInput(Unit) {
                 detectTapGestures(
                     onTap = {
-                        // 短按事件： lucky 減 1
                         lucky -= 1
                         Toast.makeText(context, "數字減1", Toast.LENGTH_SHORT).show()
                     },
                     onLongPress = {
-                        // 長按事件： lucky 加 1
                         lucky += 1
                         Toast.makeText(context, "數字加1", Toast.LENGTH_SHORT).show()
                     }
