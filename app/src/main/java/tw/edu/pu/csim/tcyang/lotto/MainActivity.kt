@@ -68,5 +68,7 @@ fun Play(modifier: Modifier = Modifier) {
         ) {
             Text("重新產生樂透碼")
         }
+
+        Text("楊子青共同編輯程式")
     }
 }
