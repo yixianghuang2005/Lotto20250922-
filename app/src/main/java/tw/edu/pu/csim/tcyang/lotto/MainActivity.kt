@@ -23,6 +23,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import tw.edu.pu.csim.tcyang.lotto.ui.theme.LottoTheme
 import androidx.compose.runtime.setValue // 引入 setValue
 import androidx.compose.ui.platform.LocalContext // 引入 LocalContext
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.geometry.Offset
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,15 +49,21 @@ fun Play(modifier: Modifier = Modifier) {
         mutableStateOf((1..100).random())
     }
 
-    // 在 Composable 函式中取得 Context
     val context = LocalContext.current
 
     Column (
+        // 使用 pointerInput 來處理更詳細的觸控事件
         modifier = modifier
             .fillMaxSize()
-            .clickable {
-                // 在點擊事件中顯示 Toast
-                Toast.makeText(context, "螢幕觸控(黃義祥)", Toast.LENGTH_SHORT).show()
+            .pointerInput(Unit) {
+                // 偵測單擊手勢
+                detectTapGestures { offset: Offset ->
+                    // 取得觸控的 x 和 y 座標
+                    val x = offset.x.toInt()
+                    val y = offset.y.toInt()
+                    // 顯示包含座標的 Toast 訊息
+                    Toast.makeText(context, "觸控座標：($x, $y)", Toast.LENGTH_SHORT).show()
+                }
             },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
