@@ -23,9 +23,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import tw.edu.pu.csim.tcyang.lotto.ui.theme.LottoTheme
 import androidx.compose.runtime.setValue // 引入 setValue
 import androidx.compose.ui.platform.LocalContext // 引入 LocalContext
-import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.geometry.Offset
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,37 +46,21 @@ fun Play(modifier: Modifier = Modifier) {
         mutableStateOf((1..100).random())
     }
 
+    // 在 Composable 函式中取得 Context
     val context = LocalContext.current
 
-    Column(
-        // 使用 pointerInput 處理整個 Column 的點擊事件，以顯示座標
+    Column (
         modifier = modifier
             .fillMaxSize()
-            .pointerInput(Unit) {
-                detectTapGestures { offset: Offset ->
-                    val x = offset.x.toInt()
-                    val y = offset.y.toInt()
-                    Toast.makeText(context, "觸控座標：($x, $y)", Toast.LENGTH_SHORT).show()
-                }
+            .clickable {
+                // 在點擊事件中顯示 Toast
+                Toast.makeText(context, "螢幕觸控(黃義祥)", Toast.LENGTH_SHORT).show()
             },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
-    ) {
-        // 在 Text 本身添加一個獨立的 pointerInput 修飾詞來處理數字增減
+    ){
         Text(
-            text = "樂透數字(1-100)為 $lucky",
-            modifier = Modifier.pointerInput(Unit) {
-                detectTapGestures(
-                    onTap = {
-                        lucky -= 1
-                        Toast.makeText(context, "數字減1", Toast.LENGTH_SHORT).show()
-                    },
-                    onLongPress = {
-                        lucky += 1
-                        Toast.makeText(context, "數字加1", Toast.LENGTH_SHORT).show()
-                    }
-                )
-            }
+            text = "樂透數字(1-100)為 $lucky"
         )
 
         Button(
@@ -88,6 +69,7 @@ fun Play(modifier: Modifier = Modifier) {
             Text("重新產生樂透碼")
         }
 
-        Text("楊子青共同編輯程式")
+        Text("陳宇謙共同編輯程式")
+
     }
 }
